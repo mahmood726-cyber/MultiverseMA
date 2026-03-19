@@ -1,12 +1,12 @@
 # MultiverseMA: A Browser-Based Engine for Multiverse Meta-Analysis
 
-**Authors:** [AUTHOR_NAME_PLACEHOLDER]^1^
+**Authors:** Mahmood Ahmad^1^
 
-^1^ [AFFILIATION_PLACEHOLDER]
+^1^ Royal Free London NHS Foundation Trust, London, UK; Tahir Heart Institute, Rabwah, Pakistan
 
-**Corresponding author:** [CORRESPONDING_EMAIL_PLACEHOLDER]
+**Corresponding author:** mahmood726@gmail.com
 
-**ORCID:** [ORCID_PLACEHOLDER]
+**ORCID:** YOUR-ORCID-HERE
 
 ---
 
@@ -20,7 +20,7 @@
 
 **Results:** We demonstrate MultiverseMA on three built-in datasets. The BCG vaccine dataset (13 studies) yields 100% direction concordance and 100% significance across 48 specifications (median log-RR = -0.633), confirming extreme robustness. The aspirin-stroke dataset reveals fragility, with significance depending on estimator and inclusion choices. The omega-3/cardiovascular mortality dataset exposes controversy, with high heterogeneity across specifications.
 
-**Conclusions:** MultiverseMA is the first browser-based multiverse meta-analysis engine. It is open-source, validated by 33 Selenium tests and multi-persona code review, and freely available at [GITHUB_URL_PLACEHOLDER].
+**Conclusions:** MultiverseMA is the first browser-based multiverse meta-analysis engine. It is open-source, validated by 33 Selenium tests and multi-persona code review, and freely available at https://github.com/mahmood726-cyber/MultiverseMA.
 
 **Keywords:** multiverse analysis, meta-analysis, specification curve, vibration of effects, robustness, sensitivity analysis, browser-based tool
 
@@ -382,27 +382,27 @@ Three use cases demonstrate the tool's value: the BCG vaccine dataset confirms a
 
 Future development priorities include: (a) a WebR-based in-browser validation tier that cross-checks JavaScript computations against R in real time, (b) support for weighted specification curves where methodologically preferred specifications receive higher weight, (c) a formal inferential test for multiverse robustness based on the proportion of significant specifications relative to chance, and (d) extension to network meta-analysis and multi-level models.
 
-MultiverseMA is open-source and freely available at [GITHUB_URL_PLACEHOLDER] under the MIT License. The complete source code, test suite, and built-in datasets are contained in a single HTML file that can be downloaded and run offline.
+MultiverseMA is open-source and freely available at https://github.com/mahmood726-cyber/MultiverseMA under the MIT License. The complete source code, test suite, and built-in datasets are contained in a single HTML file that can be downloaded and run offline.
 
 ---
 
 ## Data Availability
 
-Three built-in example datasets are included directly in MultiverseMA. The BCG vaccine dataset is from Colditz et al. [17]. The aspirin-stroke dataset is from published randomized trials of aspirin for stroke prevention [18]. The omega-3/cardiovascular mortality dataset is from published trials of omega-3 supplementation [19]. No external data access is required. Source code is available at [GITHUB_URL_PLACEHOLDER].
+Three built-in example datasets are included directly in MultiverseMA. The BCG vaccine dataset is from Colditz et al. [17]. The aspirin-stroke dataset is from published randomized trials of aspirin for stroke prevention [18]. The omega-3/cardiovascular mortality dataset is from published trials of omega-3 supplementation [19]. No external data access is required. Source code is available at https://github.com/mahmood726-cyber/MultiverseMA.
 
 ---
 
 ## Software Availability
 
-- **Source code:** [GITHUB_URL_PLACEHOLDER]
-- **Archived version:** [ZENODO_DOI_PLACEHOLDER]
+- **Source code:** https://github.com/mahmood726-cyber/MultiverseMA
+- **Archived version:** ZENODO_DOI_PENDING
 - **License:** MIT
 
 ---
 
 ## Author Contributions
 
-[AUTHOR_NAME_PLACEHOLDER] conceived and designed the tool, implemented the statistical engines and visualizations, conducted the validation, and wrote the manuscript.
+Mahmood Ahmad conceived and designed the tool, implemented the statistical engines and visualizations, conducted the validation, and wrote the manuscript.
 
 ---
 
