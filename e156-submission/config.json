@@ -1,0 +1,57 @@
+{
+  "title": "MultiverseMA: Browser-Based Multiverse Meta-Analysis Engine",
+  "slug": "multiverse-ma",
+  "author": "Mahmood Ahmad",
+  "date": "2026-03-26",
+  "path": "C:\\Models\\MultiverseMA",
+  "type": "methods",
+  "primary_estimand": "Specification concordance",
+  "summary": "First browser-based multiverse meta-analysis engine with specification curve, VoE Janus plot, and influence decomposition across seven decision dimensions.",
+  "body": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and reveal whether meta-analytic conclusions are robust or fragile? Three built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (6 studies), and omega-3 cardiovascular mortality (8 studies), spanning diverse clinical domains. MultiverseMA, a single-file HTML application of 2,430 lines, generates the full Cartesian product across seven decision dimensions including estimator choice, CI method, outlier handling, and publication bias adjustment. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all 48 specifications. The aspirin-stroke dataset revealed fragility, with significance flipping under alternative estimator and inclusion choices, while omega-3 showed high between-specification heterogeneity. This tool is the first browser-based multiverse meta-analysis engine, validated by 33 Selenium tests, enabling transparent robustness assessment without software installation or programming. A limitation is that the engine currently supports univariate pairwise meta-analysis only and does not incorporate network or diagnostic accuracy models.",
+  "sentences": [
+    {
+      "role": "Question",
+      "text": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and reveal whether meta-analytic conclusions are robust or fragile?"
+    },
+    {
+      "role": "Dataset",
+      "text": "Three built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (6 studies), and omega-3 cardiovascular mortality (8 studies), spanning diverse clinical domains."
+    },
+    {
+      "role": "Method",
+      "text": "MultiverseMA, a single-file HTML application of 2,430 lines, generates the full Cartesian product across seven decision dimensions including estimator choice, CI method, outlier handling, and publication bias adjustment."
+    },
+    {
+      "role": "Primary result",
+      "text": "The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all 48 specifications."
+    },
+    {
+      "role": "Robustness",
+      "text": "The aspirin-stroke dataset revealed fragility, with significance flipping under alternative estimator and inclusion choices, while omega-3 showed high between-specification heterogeneity."
+    },
+    {
+      "role": "Interpretation",
+      "text": "This tool is the first browser-based multiverse meta-analysis engine, validated by 33 Selenium tests, enabling transparent robustness assessment without software installation or programming."
+    },
+    {
+      "role": "Boundary",
+      "text": "A limitation is that the engine currently supports univariate pairwise meta-analysis only and does not incorporate network or diagnostic accuracy models."
+    }
+  ],
+  "notes": {
+    "app": "MultiverseMA v1.0",
+    "data": "BCG vaccine, aspirin-stroke, omega-3 (built-in datasets)",
+    "code": "https://github.com/mahmood726-cyber/MultiverseMA",
+    "doi": "",
+    "version": "1.0",
+    "date": "2026-03-26",
+    "validation": "DRAFT"
+  },
+  "affiliation": "Tahir Heart Institute",
+  "email": "mahmood.ahmad2@nhs.net",
+  "references": [
+    "Walsh M, Srinathan SK, McAuley DF, et al. The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. J Clin Epidemiol. 2014;67(6):622-628.",
+    "Atal I, Porcher R, Boutron I, Ravaud P. The statistical significance of meta-analyses is frequently fragile: definition of a fragility index for meta-analyses. J Clin Epidemiol. 2019;111:32-40.",
+    "Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021."
+  ]
+}
