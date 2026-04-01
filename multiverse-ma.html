@@ -493,7 +493,7 @@ body.dark .r-code-box { background: #0d1117; }
   <h1><span>Multiverse</span> Meta-Analysis Engine</h1>
   <div class="header-controls">
     <div class="dataset-dropdown">
-      <button onclick="toggleDatasetDropdown()" title="Load example dataset" id="datasetBtn">Load Example</button>
+      <button onclick="toggleDatasetDropdown()" title="Load example dataset" id="datasetBtn" aria-haspopup="true" aria-expanded="false" aria-controls="datasetDropdown">Load Example</button>
       <div class="dataset-dropdown-menu" id="datasetDropdown">
         <button onclick="loadDataset('bcg')">BCG Vaccine &amp; Tuberculosis<span class="ds-desc">13 RCTs, log-RR (Colditz 1994)</span></button>
         <button onclick="loadDataset('aspirin')">Aspirin &amp; Stroke Prevention<span class="ds-desc">8 trials, mixed results (fragile)</span></button>
@@ -566,7 +566,7 @@ body.dark .r-code-box { background: #0d1117; }
 
   <div class="spec-warning" id="specWarning"></div>
   <div class="progress-controls">
-    <div class="progress-bar" id="progressBar"><div class="fill" id="progressFill"></div></div>
+    <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Analysis progress"><div class="fill" id="progressFill"></div></div>
     <button class="cancel-btn" id="cancelBtn" onclick="cancelMultiverse()" style="display:none">Cancel</button>
   </div>
 
@@ -1477,21 +1477,21 @@ function copasSelection(yi, vi) {
 
 // ---- Egger Regression Test ----
 function eggerTest(yi, vi) {
+  // Sterne & Egger (2001) WLS regression: yi = a + b*sei, weights = 1/vi
   const k = yi.length;
   if (k < 3) return null;
   const sei = vi.map(v => Math.sqrt(v));
-  const zi = yi.map((y, i) => y / sei[i]); // standardized effects
-  const prec = sei.map(se => 1 / se); // precision
-  // Regress z_i = a + b * prec_i
-  const meanP = prec.reduce((a, b) => a + b, 0) / k;
-  const meanZ = zi.reduce((a, b) => a + b, 0) / k;
-  const ssP = prec.reduce((s, p) => s + (p - meanP) ** 2, 0);
-  const ssPZ = prec.reduce((s, p, i) => s + (p - meanP) * (zi[i] - meanZ), 0);
-  const slope = ssP > 0 ? ssPZ / ssP : 0;
-  const intercept = meanZ - slope * meanP;
-  const residSS = zi.reduce((s, z, i) => s + (z - intercept - slope * prec[i]) ** 2, 0);
+  const wi = vi.map(v => 1 / v); // precision-squared weights (WLS)
+  const W = wi.reduce((a, b) => a + b, 0);
+  const meanSE_w = wi.reduce((s, w, i) => s + w * sei[i], 0) / W;
+  const meanY_w = wi.reduce((s, w, i) => s + w * yi[i], 0) / W;
+  const ssX_w = wi.reduce((s, w, i) => s + w * (sei[i] - meanSE_w) ** 2, 0);
+  const ssXY_w = wi.reduce((s, w, i) => s + w * (sei[i] - meanSE_w) * (yi[i] - meanY_w), 0);
+  const slope = ssX_w > 0 ? ssXY_w / ssX_w : 0;
+  const intercept = meanY_w - slope * meanSE_w;
+  const residSS = wi.reduce((s, w, i) => s + w * (yi[i] - intercept - slope * sei[i]) ** 2, 0);
   const sResid = Math.sqrt(residSS / (k - 2));
-  const seIntercept = sResid / Math.sqrt(ssP);
+  const seIntercept = sResid / Math.sqrt(ssX_w);
   const tStat = intercept / seIntercept;
   const df = k - 2;
   const pval = pValueFromT(tStat, df);
@@ -1732,7 +1732,7 @@ function initDecisionDimensions() {
         { id: 'original', label: 'Original scale (as entered)', checked: true },
         { id: 'logOR_approx', label: 'Approx. log-OR scale', checked: false },
         { id: 'logRR_approx', label: 'Approx. log-RR scale', checked: false },
-        { id: 'smd_approx', label: 'Approx. SMD scale', checked: false },
+        { id: 'smd_approx', label: 'Approx. SMD (from log-OR, Chinn 2000)', checked: false },
         { id: 'logHR_approx', label: 'Approx. log-HR scale', checked: false }
       ]
     },
@@ -2128,8 +2128,9 @@ const BUILT_IN_DATASETS = {
 function toggleDatasetDropdown() {
   const menu = document.getElementById('datasetDropdown');
   menu.classList.toggle('open');
-  // Close when clicking outside
-  if (menu.classList.contains('open')) {
+  const isOpen = menu.classList.contains('open');
+  document.getElementById('datasetBtn').setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  if (isOpen) {
     setTimeout(() => {
       document.addEventListener('click', closeDatasetDropdownOutside, { once: true });
     }, 0);
@@ -2384,7 +2385,9 @@ function executeMultiverse(checked, progressFill) {
 
     // Update progress every 100 specs
     if (s % 100 === 0) {
-      progressFill.style.width = ((s / totalSpecs) * 100).toFixed(1) + '%';
+      const pct = ((s / totalSpecs) * 100).toFixed(1);
+      progressFill.style.width = pct + '%';
+      document.getElementById('progressBar').setAttribute('aria-valuenow', Math.round(pct));
     }
   }
 
@@ -3597,6 +3600,7 @@ function generateReport() {
 let focusedSpecIdx = -1;
 
 function setupSpecCurveKeyboard() {
+  focusedSpecIdx = -1; // reset between runs
   const svg = document.getElementById('specCurveSVG');
   if (!svg) return;
   const dots = svg.querySelectorAll('.spec-dot');
@@ -3638,7 +3642,9 @@ function handleSpecCurveKeydown(e) {
   }
 }
 
+let _specDetailReturnFocus = null;
 function showSpecDetail(idx) {
+  _specDetailReturnFocus = document.activeElement;
   const r = specResults[idx];
   if (!r) return;
   const panel = document.getElementById('specDetailPanel');
@@ -3692,6 +3698,7 @@ function closeSpecDetail() {
   panel.style.display = 'none';
   overlay.style.display = 'none';
   document.removeEventListener('keydown', specDetailEscHandler);
+  if (_specDetailReturnFocus) { _specDetailReturnFocus.focus(); _specDetailReturnFocus = null; }
 }
 
 // ---- Add keyboard setup after rendering spec curve ----
