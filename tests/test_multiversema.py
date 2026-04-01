@@ -593,7 +593,7 @@ class TestNewDimensions:
     def test_studentized_in_outlier(self, driver):
         """T46: Studentized residuals option exists in outlier handling."""
         grid_text = driver.execute_script("return document.getElementById('decisionGrid').textContent")
-        assert 'Studentized' in grid_text or 'studentized' in grid_text.lower()
+        assert 'Standardized' in grid_text or 'standardized' in grid_text.lower()
 
     def test_gosh_in_inclusion(self, driver):
         """T47: GOSH option exists in inclusion dimension."""

@@ -541,8 +541,8 @@ body.dark .r-code-box { background: #0d1117; }
       <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVFile(event)">
       <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="handleJSONFile(event)">
     </div>
-    <div class="drop-zone" id="dropZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-      Drop CSV or JSON file here to import study data
+    <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Drop CSV or JSON file here, or press Enter to browse" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('csvFileInput').click()}" onclick="document.getElementById('csvFileInput').click()">
+      Drop CSV or JSON file here (or click to browse)
     </div>
   </div>
 
@@ -646,10 +646,10 @@ body.dark .r-code-box { background: #0d1117; }
     </div>
 
     <!-- Two-Way Interaction Heatmap -->
-    <div class="section-title" style="margin-top:24px">Two-Way Interactions (Effect on Pooled Estimate)</div>
+    <div class="section-title" style="margin-top:24px">Joint Decision Effects (Pairwise Variance Explained)</div>
     <div class="card fade-in">
       <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px">
-        Do pairs of decisions interact? Darker cells indicate stronger interaction effects.
+        Combined explained variance from each pair of dimensions (includes main effects + interaction). Darker = more influential pair.
       </p>
       <div class="heatmap-container" id="interactionHeatmap" role="img" aria-label="Interaction heatmap between decision dimensions"></div>
     </div>
@@ -740,7 +740,7 @@ body.dark .r-code-box { background: #0d1117; }
 
 <!-- Tutorial Overlay -->
 <div class="tutorial-overlay" id="tutorialOverlay" onclick="closeTutorial()"></div>
-<div class="tutorial-box" id="tutorialBox" style="display:none">
+<div class="tutorial-box" id="tutorialBox" style="display:none" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
   <h3 id="tutorialTitle"></h3>
   <p id="tutorialText"></p>
   <div class="tutorial-nav">
@@ -1127,9 +1127,10 @@ function ebEstimator(yi, vi) {
   const W_re = wi_re.reduce((a, b) => a + b, 0);
   const theta = yi.reduce((s, y, i) => s + wi_re[i] * y, 0) / W_re;
   const se = Math.sqrt(1 / W_re);
-  const Q_final = yi.reduce((s, y, i) => s + wi_re[i] * (y - theta) ** 2, 0);
-  const I2 = Math.max(0, (Q_final - (k - 1)) / Math.max(Q_final, 1)) * 100;
-  return { theta, se, tau2, I2, Q: Q_final, k };
+  // Use FE Q-statistic for I² (standard definition)
+  const fe = fixedEffectMA(yi, vi);
+  const I2 = fe.Q > (k - 1) ? Math.max(0, (fe.Q - (k - 1)) / fe.Q * 100) : 0;
+  return { theta, se, tau2, I2, Q: fe.Q, k };
 }
 
 // ---- Profile Likelihood (PL) estimator ----
@@ -1758,7 +1759,7 @@ function initDecisionDimensions() {
         { id: 'sd2', label: 'Remove |z| > 2 SD', checked: true },
         { id: 'sd3', label: 'Remove |z| > 3 SD', checked: false },
         { id: 'cooks', label: "Cook's distance > 4/k", checked: false },
-        { id: 'studentized', label: 'Studentized residuals > 2', checked: false }
+        { id: 'studentized', label: 'Standardized residuals > 2', checked: false }
       ]
     },
     {
@@ -1769,7 +1770,7 @@ function initDecisionDimensions() {
         { id: 'none', label: 'No adjustment', checked: true },
         { id: 'trimfill', label: 'Trim-and-fill (Duval-Tweedie)', checked: true },
         { id: 'petpeese', label: 'PET-PEESE (Stanley-Doucouliagos)', checked: false },
-        { id: 'copas', label: 'Copas selection model', checked: false }
+        { id: 'copas', label: 'Copas (simplified, fixed \u03b3)', checked: false }
       ]
     },
     {
@@ -4362,12 +4363,15 @@ function exportPNG() {
   const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(svgBlob);
   img.onload = () => {
-    canvas.width = img.width * 2;
-    canvas.height = img.height * 2;
+    const vb = svgEl.viewBox?.baseVal;
+    const w = (vb && vb.width > 0) ? vb.width : (img.width || 800);
+    const h = (vb && vb.height > 0) ? vb.height : (img.height || 400);
+    canvas.width = w * 2;
+    canvas.height = h * 2;
     ctx.scale(2, 2);
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, w, h);
     URL.revokeObjectURL(url);
     canvas.toBlob(blob => {
       const pngUrl = URL.createObjectURL(blob);
@@ -4426,8 +4430,11 @@ const TUTORIAL_STEPS = [
 
 let tutorialStep = -1;
 
+function tutorialEscHandler(e) { if (e.key === 'Escape') closeTutorial(); }
+
 function startTutorial() {
   tutorialStep = 0;
+  document.addEventListener('keydown', tutorialEscHandler);
   showTutorialStep();
 }
 
@@ -4463,6 +4470,8 @@ function showTutorialStep() {
     box.style.left = '50%';
     box.style.transform = 'translate(-50%, -50%)';
   }
+  // Focus the Next/Finish button for keyboard users
+  setTimeout(() => document.getElementById('tutorialNextBtn').focus(), 100);
 }
 
 function tutorialNext() {
@@ -4483,6 +4492,7 @@ function tutorialPrev() {
 
 function closeTutorial() {
   tutorialStep = -1;
+  document.removeEventListener('keydown', tutorialEscHandler);
   document.getElementById('tutorialOverlay').classList.remove('active');
   document.getElementById('tutorialBox').style.display = 'none';
 }
