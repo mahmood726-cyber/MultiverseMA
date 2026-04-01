@@ -1662,8 +1662,9 @@ function hoEstimator(yi, vi) {
   const wi = vi.map(v => v > 0 ? 1 / v : 0);
   const sumW = wi.reduce((a, b) => a + b, 0);
   const sumW2 = wi.reduce((a, w) => a + w * w, 0);
-  // Hedges-Olkin: unbiased, non-iterative
-  const tau2 = Math.max(0, ((k - 1) * (fe.Q - (k - 1))) / ((k - 1) * sumW - sumW2 / sumW));
+  // Hedges-Olkin: unbiased, non-iterative (standard DL/HE formula)
+  const C = sumW - sumW2 / sumW;
+  const tau2 = Math.max(0, (fe.Q - (k - 1)) / C);
   const wi2 = vi.map(v => 1 / (v + tau2));
   const sumW2b = wi2.reduce((a, b) => a + b, 0);
   const theta = wi2.reduce((s, w, i) => s + w * yi[i], 0) / sumW2b;
