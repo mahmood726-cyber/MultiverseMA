@@ -1,27 +1,27 @@
 Mahmood Ahmad
-Tahir Heart Institute
-author@example.com
+Royal Free Hospital, London
+mahmood.ahmad2@nhs.net
 
 MultiverseMA: Browser-Based Multiverse Meta-Analysis Engine
 
-Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and reveal whether meta-analytic conclusions are robust or fragile? Three built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (6 studies), and omega-3 cardiovascular mortality (8 studies), spanning diverse clinical domains. MultiverseMA, a single-file HTML application of 2,430 lines, generates the full Cartesian product across seven decision dimensions including estimator choice, CI method, outlier handling, and publication bias adjustment. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all 48 specifications. The aspirin-stroke dataset revealed fragility, with significance flipping under alternative estimator and inclusion choices, while omega-3 showed high between-specification heterogeneity. This tool is the first browser-based multiverse meta-analysis engine, validated by 33 Selenium tests, enabling transparent robustness assessment without software installation or programming. A limitation is that the engine currently supports univariate pairwise meta-analysis only and does not incorporate network or diagnostic accuracy models.
+Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and quantify how robust a meta-analytic conclusion truly is? Five built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (8 studies), omega-3 cardiovascular mortality (7 studies), IV magnesium in AMI (10 studies), and antenatal corticosteroids (12 studies). MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions — including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments — with TruthCert SHA-256 audit trails. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all specifications. Aspirin-stroke revealed fragility at 62% concordance, while magnesium showed the ISIS-4 mega-trial dominance effect. This is the first browser-based multiverse meta-analysis engine, validated by 81 Selenium tests with WebR cross-validation, enabling transparent robustness assessment without installation. A limitation is that the engine supports univariate pairwise meta-analysis only.
 
 Outside Notes
 
 Type: methods
 Primary estimand: Specification concordance
-App: MultiverseMA v1.0
-Data: BCG vaccine, aspirin-stroke, omega-3 (built-in datasets)
+App: MultiverseMA v2.0
+Data: BCG vaccine, aspirin-stroke, omega-3, magnesium AMI, corticosteroids (built-in)
 Code: https://github.com/mahmood726-cyber/MultiverseMA
-Version: 1.0
-Validation: DRAFT
+Version: 2.0
+Validation: PASS (81/81 tests, WebR cross-validated, 3-round review clean)
 
 References
 
-1. Walsh M, Srinathan SK, McAuley DF, et al. The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. J Clin Epidemiol. 2014;67(6):622-628.
-2. Atal I, Porcher R, Boutron I, Ravaud P. The statistical significance of meta-analyses is frequently fragile: definition of a fragility index for meta-analyses. J Clin Epidemiol. 2019;111:32-40.
+1. Voracek M, Kossmeier M, Tran US. Which data to meta-analyze, and how? Specification-curve and multiverse-analysis approaches. Zeitschrift fur Psychologie. 2019;227(1):64-82.
+2. Simonsohn U, Simmons JP, Nelson LD. Specification curve analysis. Nature Human Behaviour. 2020;4:1208-1214.
 3. Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021.
 
 AI Disclosure
 
-This work represents a compiler-generated evidence micro-publication (i.e., a structured, pipeline-based synthesis output). AI (Claude, Anthropic) was used as a constrained synthesis engine operating on structured inputs and predefined rules for infrastructure generation, not as an autonomous author. The 156-word body was written and verified by the author, who takes full responsibility for the content. This disclosure follows ICMJE recommendations (2023) that AI tools do not meet authorship criteria, COPE guidance on transparency in AI-assisted research, and WAME recommendations requiring disclosure of AI use. All analysis code, data, and versioned evidence capsules (TruthCert) are archived for independent verification.
+This work represents a compiler-generated evidence micro-publication. AI (Claude, Anthropic) was used as a constrained synthesis engine for infrastructure generation, not as an autonomous author. The 156-word body was written and verified by the author, who takes full responsibility. This disclosure follows ICMJE 2023, COPE, and WAME recommendations. All analysis code, data, and TruthCert bundles are archived for independent verification.
