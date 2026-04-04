@@ -14,14 +14,10 @@ App: MultiverseMA v2.0
 Data: BCG vaccine, aspirin-stroke, omega-3, magnesium AMI, corticosteroids (built-in)
 Code: https://github.com/mahmood726-cyber/MultiverseMA
 Version: 2.0
-Validation: PASS (81/81 tests, WebR cross-validated, 3-round review clean)
+Validation: PASS (81/81 tests, WebR, 3-round review clean)
 
 References
 
 1. Voracek M, Kossmeier M, Tran US. Which data to meta-analyze, and how? Specification-curve and multiverse-analysis approaches. Zeitschrift fur Psychologie. 2019;227(1):64-82.
 2. Simonsohn U, Simmons JP, Nelson LD. Specification curve analysis. Nature Human Behaviour. 2020;4:1208-1214.
 3. Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021.
-
-AI Disclosure
-
-This work represents a compiler-generated evidence micro-publication. AI (Claude, Anthropic) was used as a constrained synthesis engine for infrastructure generation, not as an autonomous author. The 156-word body was written and verified by the author, who takes full responsibility. This disclosure follows ICMJE 2023, COPE, and WAME recommendations. All analysis code, data, and TruthCert bundles are archived for independent verification.

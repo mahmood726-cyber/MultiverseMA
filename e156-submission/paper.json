@@ -2,48 +2,48 @@
   "title": "MultiverseMA: Browser-Based Multiverse Meta-Analysis Engine",
   "slug": "multiverse-ma",
   "author": "Mahmood Ahmad",
-  "date": "2026-03-26",
-  "body": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and reveal whether meta-analytic conclusions are robust or fragile? Three built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (6 studies), and omega-3 cardiovascular mortality (8 studies), spanning diverse clinical domains. MultiverseMA, a single-file HTML application of 2,430 lines, generates the full Cartesian product across seven decision dimensions including estimator choice, CI method, outlier handling, and publication bias adjustment. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all 48 specifications. The aspirin-stroke dataset revealed fragility, with significance flipping under alternative estimator and inclusion choices, while omega-3 showed high between-specification heterogeneity. This tool is the first browser-based multiverse meta-analysis engine, validated by 33 Selenium tests, enabling transparent robustness assessment without software installation or programming. A limitation is that the engine currently supports univariate pairwise meta-analysis only and does not incorporate network or diagnostic accuracy models.",
-  "word_count": 156,
+  "date": "2026-04-01",
+  "body": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and quantify how robust a meta-analytic conclusion truly is? Five built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (8 studies), omega-3 cardiovascular mortality (7 studies), IV magnesium in AMI (10 studies), and antenatal corticosteroids (12 studies). MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions — including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments — with TruthCert SHA-256 audit trails. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all specifications. Aspirin-stroke revealed fragility at 62% concordance, while magnesium showed the ISIS-4 mega-trial dominance effect. This is the first browser-based multiverse meta-analysis engine, validated by 81 Selenium tests with WebR cross-validation, enabling transparent robustness assessment without installation. A limitation is that the engine supports univariate pairwise meta-analysis only.",
+  "word_count": 155,
   "sentence_count": 7,
   "sentences": [
     {
       "role": "Question",
-      "text": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and reveal whether meta-analytic conclusions are robust or fragile?"
+      "text": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and quantify how robust a meta-analytic conclusion truly is?"
     },
     {
       "role": "Dataset",
-      "text": "Three built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (6 studies), and omega-3 cardiovascular mortality (8 studies), spanning diverse clinical domains."
+      "text": "Five built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (8 studies), omega-3 cardiovascular mortality (7 studies), IV magnesium in AMI (10 studies), and antenatal corticosteroids (12 studies)."
     },
     {
       "role": "Method",
-      "text": "MultiverseMA, a single-file HTML application of 2,430 lines, generates the full Cartesian product across seven decision dimensions including estimator choice, CI method, outlier handling, and publication bias adjustment."
+      "text": "MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions — including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments — with TruthCert SHA-256 audit trails."
     },
     {
       "role": "Primary result",
-      "text": "The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all 48 specifications."
+      "text": "The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all specifications."
     },
     {
       "role": "Robustness",
-      "text": "The aspirin-stroke dataset revealed fragility, with significance flipping under alternative estimator and inclusion choices, while omega-3 showed high between-specification heterogeneity."
+      "text": "Aspirin-stroke revealed fragility at 62% concordance, while magnesium showed the ISIS-4 mega-trial dominance effect."
     },
     {
       "role": "Interpretation",
-      "text": "This tool is the first browser-based multiverse meta-analysis engine, validated by 33 Selenium tests, enabling transparent robustness assessment without software installation or programming."
+      "text": "This is the first browser-based multiverse meta-analysis engine, validated by 81 Selenium tests with WebR cross-validation, enabling transparent robustness assessment without installation."
     },
     {
       "role": "Boundary",
-      "text": "A limitation is that the engine currently supports univariate pairwise meta-analysis only and does not incorporate network or diagnostic accuracy models."
+      "text": "A limitation is that the engine supports univariate pairwise meta-analysis only."
     }
   ],
   "notes": {
-    "app": "MultiverseMA v1.0",
-    "data": "BCG vaccine, aspirin-stroke, omega-3 (built-in datasets)",
+    "app": "MultiverseMA v2.0",
+    "data": "BCG vaccine, aspirin-stroke, omega-3, magnesium AMI, corticosteroids (built-in)",
     "code": "https://github.com/mahmood726-cyber/MultiverseMA",
     "doi": "",
-    "version": "1.0",
-    "date": "2026-03-26",
-    "validation": "DRAFT"
+    "version": "2.0",
+    "date": "2026-04-01",
+    "validation": "PASS (81/81 tests, WebR, 3-round review clean)"
   },
   "type": "methods",
   "primary_estimand": "Specification concordance",
@@ -63,7 +63,7 @@
       {
         "name": "word count",
         "ok": true,
-        "detail": "Found 156 words."
+        "detail": "Found 155 words."
       },
       {
         "name": "no headings",
@@ -78,7 +78,7 @@
       {
         "name": "result sentence has interval",
         "ok": true,
-        "detail": "Sentence 4 should include a confidence interval."
+        "detail": "Sentence 4 should include a quantitative result such as a percentage, count, or interval."
       },
       {
         "name": "result sentence has estimand",

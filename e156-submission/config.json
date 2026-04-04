@@ -7,7 +7,7 @@
   "type": "methods",
   "primary_estimand": "Specification concordance",
   "summary": "First browser-based multiverse meta-analysis engine with 10 estimators, 9 decision dimensions, TruthCert audit trails, and guided tutorial across five built-in datasets.",
-  "body": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and quantify how robust a meta-analytic conclusion truly is? Five built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (8 studies), omega-3 cardiovascular mortality (7 studies), IV magnesium in AMI (10 studies), and antenatal corticosteroids (12 studies). MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions \u2014 including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments \u2014 with TruthCert SHA-256 audit trails. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all specifications. Aspirin-stroke revealed fragility at 62% concordance, while magnesium showed the ISIS-4 mega-trial dominance effect. This is the first browser-based multiverse meta-analysis engine, validated by 81 Selenium tests with WebR cross-validation, enabling transparent robustness assessment without installation. A limitation is that the engine supports univariate pairwise meta-analysis only.",
+  "body": "Can a browser-based multiverse engine systematically enumerate all defensible analytic specifications and quantify how robust a meta-analytic conclusion truly is? Five built-in datasets were analyzed: BCG vaccine (13 studies), aspirin-stroke (8 studies), omega-3 cardiovascular mortality (7 studies), IV magnesium in AMI (10 studies), and antenatal corticosteroids (12 studies). MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions — including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments — with TruthCert SHA-256 audit trails. The BCG dataset yielded a median log-RR of -0.633 (95% CI -0.97 to -0.30) with 100% significance concordance across all specifications. Aspirin-stroke revealed fragility at 62% concordance, while magnesium showed the ISIS-4 mega-trial dominance effect. This is the first browser-based multiverse meta-analysis engine, validated by 81 Selenium tests with WebR cross-validation, enabling transparent robustness assessment without installation. A limitation is that the engine supports univariate pairwise meta-analysis only.",
   "sentences": [
     {
       "role": "Question",
@@ -19,7 +19,7 @@
     },
     {
       "role": "Method",
-      "text": "MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions \u2014 including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments \u2014 with TruthCert SHA-256 audit trails."
+      "text": "MultiverseMA, a single-file HTML application of 4,540 lines, generates the full Cartesian product across nine decision dimensions — including ten tau-squared estimators, four CI methods, five effect measures, and four publication bias adjustments — with TruthCert SHA-256 audit trails."
     },
     {
       "role": "Primary result",
