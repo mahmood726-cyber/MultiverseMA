@@ -1684,7 +1684,10 @@ function hsEstimator(yi, vi) {
   const vBar = sumW > 0 ? k / sumW : 0; // average sampling variance
   const varTheta = wi.reduce((s, w, i) => s + w * (yi[i] - theta) ** 2, 0) / sumW;
   const tau2 = Math.max(0, varTheta - vBar);
-  const se = Math.sqrt((varTheta) / k);
+  // SE via inverse-variance weights with tau2, consistent with other RE estimators
+  const wi_re = vi.map(v => 1 / (v + tau2));
+  const sumW_re = wi_re.reduce((a, b) => a + b, 0);
+  const se = Math.sqrt(1 / sumW_re);
   const fe = fixedEffectMA(yi, vi);
   const I2 = fe && fe.Q > (k - 1) ? Math.max(0, (fe.Q - (k - 1)) / fe.Q * 100) : 0;
   return { theta, se, Q: fe ? fe.Q : 0, k, tau2, I2 };
