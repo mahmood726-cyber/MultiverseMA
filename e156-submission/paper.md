@@ -18,6 +18,6 @@ Validation: PASS (81/81 tests, WebR, 3-round review clean)
 
 References
 
-1. Voracek M, Kossmeier M, Tran US. Which data to meta-analyze, and how? Specification-curve and multiverse-analysis approaches. Zeitschrift fur Psychologie. 2019;227(1):64-82.
-2. Simonsohn U, Simmons JP, Nelson LD. Specification curve analysis. Nature Human Behaviour. 2020;4:1208-1214.
+1. Walsh M, Srinathan SK, McAuley DF, et al. The statistical significance of randomized controlled trial results is frequently fragile: a case for a Fragility Index. J Clin Epidemiol. 2014;67(6):622-628.
+2. Atal I, Porcher R, Boutron I, Ravaud P. The statistical significance of meta-analyses is frequently fragile: definition of a fragility index for meta-analyses. J Clin Epidemiol. 2019;111:32-40.
 3. Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021.
