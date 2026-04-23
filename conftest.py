@@ -17,4 +17,5 @@ if not os.environ.get("RUN_BROWSER_TESTS"):
     collect_ignore_glob = [
         "test_multiverse.py",
         "tests/test_multiversema.py",
+        "tests/test_ui.py",
     ]
