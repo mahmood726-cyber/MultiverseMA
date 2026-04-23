@@ -433,7 +433,7 @@ body.dark .webr-summary.fail { background:#7f1d1d; color:#fca5a5; }
       <button onclick="addMultipleRows(5)">+ Add 5 Rows</button>
       <button onclick="clearAllData()">Clear All</button>
       <button onclick="importCSV()">Import CSV</button>
-      <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVFile(event)">
+      <input type="file" id="csvFileInput" aria-label="Upload CSV or TSV data file" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVFile(event)">
     </div>
   </div>
 

@@ -538,8 +538,8 @@ body.dark .r-code-box { background: #0d1117; }
       <button onclick="clearAllData()">Clear All</button>
       <button onclick="importCSV()">Import CSV</button>
       <button onclick="importJSON()">Import JSON</button>
-      <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVFile(event)">
-      <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="handleJSONFile(event)">
+      <input type="file" id="csvFileInput" aria-label="Upload CSV or TSV data file" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVFile(event)">
+      <input type="file" id="jsonFileInput" aria-label="Upload JSON data file" accept=".json" style="display:none" onchange="handleJSONFile(event)">
     </div>
     <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Drop CSV or JSON file here, or press Enter to browse" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('csvFileInput').click()}" onclick="document.getElementById('csvFileInput').click()">
       Drop CSV or JSON file here (or click to browse)
@@ -688,14 +688,14 @@ body.dark .r-code-box { background: #0d1117; }
     <div class="card fade-in">
       <h2>All Specifications <span class="badge" id="specTableBadge">0</span></h2>
       <div class="spec-filter-bar" id="specFilterBar">
-        <label>Filter:</label>
+        <label for="filterDim">Filter:</label>
         <select id="filterDim" onchange="updateFilterOptions()">
           <option value="">All dimensions</option>
         </select>
-        <select id="filterVal" onchange="applySpecFilter()">
+        <select id="filterVal" aria-label="Filter value" onchange="applySpecFilter()">
           <option value="">All values</option>
         </select>
-        <label style="margin-left:8px">Significance:</label>
+        <label for="filterSig" style="margin-left:8px">Significance:</label>
         <select id="filterSig" onchange="applySpecFilter()">
           <option value="">All</option>
           <option value="sig">Significant only</option>
