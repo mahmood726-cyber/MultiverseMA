@@ -496,10 +496,10 @@ body.dark .r-code-box { background: #0d1117; }
       <button onclick="toggleDatasetDropdown()" title="Load example dataset" id="datasetBtn" aria-haspopup="true" aria-expanded="false" aria-controls="datasetDropdown">Load Example</button>
       <div class="dataset-dropdown-menu" id="datasetDropdown">
         <button onclick="loadDataset('bcg')">BCG Vaccine &amp; Tuberculosis<span class="ds-desc">13 RCTs, log-RR (Colditz 1994)</span></button>
-        <button onclick="loadDataset('aspirin')">Aspirin &amp; Stroke Prevention<span class="ds-desc">8 trials, mixed results (fragile)</span></button>
-        <button onclick="loadDataset('omega3')">Omega-3 &amp; CV Mortality<span class="ds-desc">7 trials, controversial effect</span></button>
-        <button onclick="loadDataset('magnesium')">IV Magnesium in AMI<span class="ds-desc">10 trials, classic controversy (ISIS-4)</span></button>
-        <button onclick="loadDataset('corticosteroids')">Corticosteroids &amp; Preterm<span class="ds-desc">12 RCTs, landmark Cochrane (robust)</span></button>
+        <button onclick="loadDataset('warfarin')">Warfarin &amp; Stroke (AF)<span class="ds-desc">6 trials, log-IRR (Hart 1999)</span></button>
+        <button onclick="loadDataset('statins')">Intensive vs Moderate Statins<span class="ds-desc">4 trials, log-OR (Cannon 2006)</span></button>
+        <button onclick="loadDataset('magnesium')">IV Magnesium in AMI<span class="ds-desc">16 trials, classic controversy (Egger 2001)</span></button>
+        <button onclick="loadDataset('sdd')">Antibiotics &amp; Resp. Infections<span class="ds-desc">16 trials, log-OR (D'Amico 2009)</span></button>
       </div>
     </div>
     <button onclick="exportCSV()" title="Export all specification results">Export CSV</button>
@@ -2062,33 +2062,28 @@ const BUILT_IN_DATASETS = {
       { study: 'Comstock 1976', yi: -0.0173, vi: 0.0714, n: 34767 }
     ]
   },
-  aspirin: {
-    name: 'Aspirin & Stroke Prevention',
-    source: 'Mixed results, fragile significance',
-    measure: 'log-OR',
+  warfarin: {
+    name: 'Warfarin & Stroke Prevention (AF)',
+    source: 'Hart et al. (1999), metadat dat.hart1999 (6 trials, log incidence-rate ratio)',
+    measure: 'log-IRR',
     data: [
-      { study: 'UK-TIA 1988', yi: -0.29, vi: 0.0324, n: 2449 },
-      { study: 'SALT 1991', yi: -0.18, vi: 0.0196, n: 1360 },
-      { study: 'ESPS-2 1996', yi: -0.34, vi: 0.0256, n: 6602 },
-      { study: 'CAST 1997', yi: 0.03, vi: 0.0004, n: 21106 },
-      { study: 'IST 1997', yi: -0.02, vi: 0.0009, n: 19435 },
-      { study: 'ESPRIT 2006', yi: -0.19, vi: 0.0289, n: 2763 },
-      { study: 'SPS3 2012', yi: -0.08, vi: 0.0144, n: 3020 },
-      { study: 'POINT 2018', yi: -0.23, vi: 0.0225, n: 4881 }
+      { study: 'AFASAK', yi: -0.7842, vi: 0.1637, n: 811 },
+      { study: 'SPAF', yi: -0.9359, vi: 0.1776, n: 508 },
+      { study: 'BAATAF', yi: -1.5793, vi: 0.4103, n: 922 },
+      { study: 'CAFA', yi: -0.3887, vi: 0.2778, n: 478 },
+      { study: 'SPINAF', yi: -1.2019, vi: 0.1863, n: 972 },
+      { study: 'EAFT', yi: -1.1409, vi: 0.0700, n: 912 }
     ]
   },
-  omega3: {
-    name: 'Omega-3 & Cardiovascular Mortality',
-    source: 'Controversial effect, mixed evidence',
-    measure: 'log-RR',
+  statins: {
+    name: 'Intensive vs Moderate Statins (CHD events)',
+    source: 'Cannon et al. (2006), metadat dat.cannon2006 (4 trials, log-OR)',
+    measure: 'log-OR',
     data: [
-      { study: 'GISSI-P 1999', yi: -0.20, vi: 0.0064, n: 11324 },
-      { study: 'JELIS 2007', yi: -0.19, vi: 0.0144, n: 18645 },
-      { study: 'ORIGIN 2012', yi: -0.01, vi: 0.0049, n: 12536 },
-      { study: 'ASCEND 2018', yi: -0.02, vi: 0.0064, n: 15480 },
-      { study: 'VITAL 2019', yi: -0.04, vi: 0.0100, n: 25871 },
-      { study: 'REDUCE-IT 2019', yi: -0.20, vi: 0.0100, n: 8179 },
-      { study: 'STRENGTH 2020', yi: 0.01, vi: 0.0081, n: 13078 }
+      { study: 'PROVE-IT', yi: -0.1888, vi: 0.0137, n: 4162 },
+      { study: 'A-to-Z', yi: -0.1676, vi: 0.0101, n: 4497 },
+      { study: 'TNT', yi: -0.2401, vi: 0.0058, n: 10001 },
+      { study: 'IDEAL', yi: -0.1296, vi: 0.0051, n: 8888 }
     ]
   },
   magnesium: {
@@ -2114,23 +2109,27 @@ const BUILT_IN_DATASETS = {
       { study: 'ISIS-4 1995', yi: 0.0576, vi: 0.0010, n: 58050 }
     ]
   },
-  corticosteroids: {
-    name: 'Corticosteroids for Preterm Birth',
-    source: 'Crowley (2000), landmark Cochrane review',
+  sdd: {
+    name: 'Antibiotics & Respiratory Infections (SDD)',
+    source: "D'Amico et al. (2009), metadat dat.damico2009 (16 trials, log-OR; Jacobs zero-cell 0.5-corrected)",
     measure: 'log-OR',
     data: [
-      { study: 'Liggins 1972', yi: -0.80, vi: 0.1681, n: 282 },
-      { study: 'Block 1977', yi: -0.54, vi: 0.5329, n: 69 },
-      { study: 'Morrison 1978', yi: -0.59, vi: 0.3721, n: 126 },
-      { study: 'Taeusch 1979', yi: -0.13, vi: 0.1764, n: 189 },
-      { study: 'Papageorgiou 1979', yi: -0.94, vi: 0.2116, n: 71 },
-      { study: 'Doran 1980', yi: -0.35, vi: 0.3136, n: 140 },
-      { study: 'Teramo 1980', yi: -0.48, vi: 0.5776, n: 80 },
-      { study: 'Collaborative 1981', yi: -0.27, vi: 0.0576, n: 696 },
-      { study: 'Gamsu 1989', yi: -0.23, vi: 0.0841, n: 588 },
-      { study: 'Garite 1992', yi: -0.31, vi: 0.1024, n: 220 },
-      { study: 'Lewis 1996', yi: -0.33, vi: 0.0441, n: 502 },
-      { study: 'ACTORDS 2006', yi: -0.22, vi: 0.0289, n: 1858 }
+      { study: 'Abele-Horn 1997', yi: -2.4313, vi: 0.2855, n: 88 },
+      { study: 'Aerdts 1991', yi: -3.2291, vi: 1.1038, n: 88 },
+      { study: 'Blair 1991', yi: -1.2738, vi: 0.1239, n: 331 },
+      { study: 'Boland 1991', yi: -0.3765, vi: 0.2525, n: 64 },
+      { study: 'Cockerill 1992', yi: -1.2182, vi: 0.3633, n: 150 },
+      { study: 'Finch 1991', yi: -0.4990, vi: 0.5142, n: 44 },
+      { study: 'Jacobs 1992', yi: -2.2654, vi: 2.2677, n: 91 },
+      { study: 'Kerver 1988', yi: -2.8362, vi: 0.3175, n: 96 },
+      { study: 'Palomar 1997', yi: -1.4271, vi: 0.2067, n: 99 },
+      { study: 'Rocha 1992', yi: -1.5945, vi: 0.2423, n: 101 },
+      { study: 'Sanchez-Garcia 1992', yi: -0.8417, vi: 0.0705, n: 271 },
+      { study: 'Stoutenbeek 2007', yi: -0.8073, vi: 0.0433, n: 401 },
+      { study: 'Ulrich 1989', yi: -1.7494, vi: 0.2344, n: 112 },
+      { study: 'Verwaest 1997', yi: -0.7628, vi: 0.0832, n: 378 },
+      { study: 'Winter 1992', yi: -1.8944, vi: 0.4169, n: 183 },
+      { study: 'Krueger 2002', yi: -0.9248, vi: 0.0323, n: 527 }
     ]
   }
 };
