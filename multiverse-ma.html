@@ -2414,6 +2414,7 @@ function renderResults() {
   section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   renderMetrics();
+  renderCorrectedInterval();
   renderStabilityDashboard();
   renderConcordanceTable();
   renderPCurve();
@@ -2431,6 +2432,79 @@ function renderResults() {
   document.getElementById('rCodeCard').style.display = '';
   document.getElementById('rCodeContent').textContent = generateRCode();
   renderTruthCert();
+}
+
+// ---- Spec-collapse correction (added 2026-06-04) ----
+// A multiverse runs S specifications on ONE dataset, so the S spec estimates are
+// strongly correlated. Inverse-variance pooling them as if independent (the
+// usual "summarise the multiverse" move) collapses the CI by ~S and is
+// anti-conservative (null Type-I 60-74%; coverage 0.27-0.39 in simulation).
+// The weighted-likelihood interval (Gaussian mixture of the per-spec
+// likelihoods; variance = mean within-spec var + between-spec var) is never
+// narrower than a single spec and restores ~nominal coverage. Across 473
+// Cochrane meta-analyses, naive IV-RE pooling manufactured false robustness in
+// 40.8% of reviews.  See: spec-collapse-atlas.
+function specCollapseAggregates(specs) {
+  const n = specs.length;
+  if (n === 0) return null;
+  const thetas = specs.map(s => s.theta);
+  const vars = specs.map(s => s.se * s.se);
+  const sds = vars.map(v => Math.sqrt(v));
+  // (1) naive IV-RE pool across specs -- the cardinal sin
+  let sInv = 0, sNum = 0;
+  for (let i = 0; i < n; i++) { const inv = 1 / vars[i]; sInv += inv; sNum += thetas[i] * inv; }
+  const ivreTheta = sNum / sInv, ivreVar = 1 / sInv;
+  const ivreHalf = 1.959963984540054 * Math.sqrt(ivreVar);
+  const ivre = { theta: ivreTheta, lo: ivreTheta - ivreHalf, hi: ivreTheta + ivreHalf };
+  ivre.sig = (ivre.lo > 0 || ivre.hi < 0);
+  // (2) weighted-likelihood Gaussian mixture, uniform weights
+  const mean = thetas.reduce((a, b) => a + b, 0) / n;
+  let within = 0, between = 0;
+  for (let i = 0; i < n; i++) { within += vars[i] / n; between += ((thetas[i] - mean) ** 2) / n; }
+  const mixCdf = x => { let s = 0; for (let i = 0; i < n; i++) s += normalCDF((x - thetas[i]) / sds[i]); return s / n; };
+  const loB = Math.min(...thetas.map((t, i) => t - 6 * sds[i]));
+  const hiB = Math.max(...thetas.map((t, i) => t + 6 * sds[i]));
+  const invert = p => { let a = loB, b = hiB; for (let it = 0; it < 200; it++) { const m = (a + b) / 2; if (mixCdf(m) < p) a = m; else b = m; } return (a + b) / 2; };
+  const wl = { theta: mean, lo: invert(0.025), hi: invert(0.975), within, between, total: within + between };
+  wl.sig = (wl.lo > 0 || wl.hi < 0);
+  return { ivre, wl, widthRatio: (ivre.hi - ivre.lo) / (wl.hi - wl.lo), n };
+}
+
+function renderCorrectedInterval() {
+  const agg = specCollapseAggregates(specResults);
+  let banner = document.getElementById('correctedBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'correctedBanner';
+    const grid = document.getElementById('metricsGrid');
+    grid.parentNode.insertBefore(banner, grid);
+  }
+  if (!agg) { banner.innerHTML = ''; return; }
+  const fmt = x => (x >= 0 ? '+' : '') + x.toFixed(3);
+  const flip = agg.ivre.sig && !agg.wl.sig;
+  const cardStyle = 'flex:1;min-width:220px;padding:14px 16px;border-radius:10px;border:1px solid var(--border,#3334);';
+  banner.innerHTML =
+    '<div style="margin:8px 0 18px;padding:16px;border-radius:12px;background:rgba(230,57,70,0.06);border:1px solid rgba(230,57,70,0.25);">' +
+      '<div style="font-weight:700;margin-bottom:4px;">Spec-collapse check &mdash; how you summarise the multiverse changes the verdict</div>' +
+      '<div style="font-size:0.85em;opacity:0.8;margin-bottom:12px;">Inverse-variance pooling the specifications treats analyses of the same data as independent studies and is anti-conservative. The weighted-likelihood interval accounts for both within- and between-specification uncertainty.</div>' +
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;">' +
+        '<div style="' + cardStyle + 'background:rgba(230,57,70,0.10);">' +
+          '<div style="font-size:0.78em;text-transform:uppercase;letter-spacing:0.04em;opacity:0.75;">Naive IV-RE pool (anti-conservative)</div>' +
+          '<div style="font-size:1.15em;font-weight:600;margin:4px 0;">&theta; = ' + fmt(agg.ivre.theta) + '</div>' +
+          '<div>95% CI [' + fmt(agg.ivre.lo) + ', ' + fmt(agg.ivre.hi) + ']</div>' +
+          '<div style="margin-top:6px;font-weight:600;color:' + (agg.ivre.sig ? 'var(--danger,#e63946)' : 'var(--success,#2a9d8f)') + ';">' + (agg.ivre.sig ? 'robust (CI excludes 0)' : 'fragile (CI includes 0)') + '</div>' +
+        '</div>' +
+        '<div style="' + cardStyle + 'background:rgba(42,157,143,0.10);">' +
+          '<div style="font-size:0.78em;text-transform:uppercase;letter-spacing:0.04em;opacity:0.75;">Weighted-likelihood (calibrated)</div>' +
+          '<div style="font-size:1.15em;font-weight:600;margin:4px 0;">&theta; = ' + fmt(agg.wl.theta) + '</div>' +
+          '<div>95% CI [' + fmt(agg.wl.lo) + ', ' + fmt(agg.wl.hi) + ']</div>' +
+          '<div style="margin-top:6px;font-weight:600;color:' + (agg.wl.sig ? 'var(--danger,#e63946)' : 'var(--success,#2a9d8f)') + ';">' + (agg.wl.sig ? 'robust (CI excludes 0)' : 'fragile (CI includes 0)') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:12px;font-size:0.9em;">Naive interval is <strong>' + agg.widthRatio.toFixed(2) + '&times;</strong> the calibrated width.' +
+        (flip ? ' <strong style="color:var(--danger,#e63946);">&#9888; Verdict flip:</strong> IV-RE pooling reports a significant effect the calibrated interval does not support.' : '') +
+      '</div>' +
+    '</div>';
 }
 
 function renderMetrics() {
