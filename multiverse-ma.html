@@ -1073,8 +1073,8 @@ function sjEstimator(yi, vi) {
     const sumW = wi.reduce((a, b) => a + b, 0);
     const theta = wi.reduce((s, w, i) => s + w * yi[i], 0) / sumW;
     const newTau2 = (1 / (k - 1)) * wi.reduce((s, w, i) => {
-      const ratio = (v => (v + tau2))(vi[i]);
-      return s + ratio * (yi[i] - theta) ** 2;
+      // SJ update: weight by w_i = 1/(v_i + tau2), not by (v_i + tau2)
+      return s + w * (yi[i] - theta) ** 2;
     }, 0);
     if (Math.abs(newTau2 - tau2) < 1e-10) { tau2 = newTau2; break; }
     tau2 = Math.max(0, newTau2);
