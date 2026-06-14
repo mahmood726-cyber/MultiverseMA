@@ -2470,7 +2470,16 @@ function specCollapseAggregates(specs) {
   const loB = Math.min(...thetas.map((t, i) => t - 6 * sds[i]));
   const hiB = Math.max(...thetas.map((t, i) => t + 6 * sds[i]));
   const invert = p => { let a = loB, b = hiB; for (let it = 0; it < 200; it++) { const m = (a + b) / 2; if (mixCdf(m) < p) a = m; else b = m; } return (a + b) / 2; };
-  const wl = { theta: mean, lo: invert(0.025), hi: invert(0.975), within, between, total: within + between };
+  const total = within + between;
+  // CONFIDENCE interval for the MEAN effect -- this drives the robustness verdict.
+  // SE of the mean = sqrt(total/n); unlike the mixture-prediction interval below it
+  // shrinks with the number of specifications, so it keeps power instead of calling
+  // every multiverse "fragile". (Measured: false-robustness <=0.033 under the null,
+  // power 0.96-1.00 under a true effect. See truth-recovery/REPORT.md.)
+  const ciHalf = 1.959963984540054 * Math.sqrt(total / n);
+  // PREDICTION interval (mixture quantiles): where ONE new specification would land.
+  // Kept for display only; it must NOT decide robustness.
+  const wl = { theta: mean, lo: mean - ciHalf, hi: mean + ciHalf, predLo: invert(0.025), predHi: invert(0.975), within, between, total };
   wl.sig = (wl.lo > 0 || wl.hi < 0);
   return { ivre, wl, widthRatio: (ivre.hi - ivre.lo) / (wl.hi - wl.lo), n };
 }
@@ -2500,10 +2509,11 @@ function renderCorrectedInterval() {
           '<div style="margin-top:6px;font-weight:600;color:' + (agg.ivre.sig ? 'var(--danger,#e63946)' : 'var(--success,#2a9d8f)') + ';">' + (agg.ivre.sig ? 'robust (CI excludes 0)' : 'fragile (CI includes 0)') + '</div>' +
         '</div>' +
         '<div style="' + cardStyle + 'background:rgba(42,157,143,0.10);">' +
-          '<div style="font-size:0.78em;text-transform:uppercase;letter-spacing:0.04em;opacity:0.75;">Weighted-likelihood (calibrated)</div>' +
+          '<div style="font-size:0.78em;text-transform:uppercase;letter-spacing:0.04em;opacity:0.75;">Mean-effect CI (calibrated)</div>' +
           '<div style="font-size:1.15em;font-weight:600;margin:4px 0;">&theta; = ' + fmt(agg.wl.theta) + '</div>' +
           '<div>95% CI [' + fmt(agg.wl.lo) + ', ' + fmt(agg.wl.hi) + ']</div>' +
           '<div style="margin-top:6px;font-weight:600;color:' + (agg.wl.sig ? 'var(--danger,#e63946)' : 'var(--success,#2a9d8f)') + ';">' + (agg.wl.sig ? 'robust (CI excludes 0)' : 'fragile (CI includes 0)') + '</div>' +
+          '<div style="margin-top:6px;font-size:0.78em;opacity:0.7;">Prediction interval (where one new spec lands): [' + fmt(agg.wl.predLo) + ', ' + fmt(agg.wl.predHi) + ']</div>' +
         '</div>' +
       '</div>' +
       '<div style="margin-top:12px;font-size:0.9em;">Naive interval is <strong>' + agg.widthRatio.toFixed(2) + '&times;</strong> the calibrated width.' +
