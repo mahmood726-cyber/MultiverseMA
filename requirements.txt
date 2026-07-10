@@ -1,0 +1,6 @@
+# Test/dev dependencies for MultiverseMA.
+# The default `python -m pytest` run (smoke + headless numeric engine tests)
+# needs only pytest. The optional browser E2E suites additionally need selenium
+# plus a local Chrome/chromedriver (see README).
+pytest>=7
+selenium>=4
